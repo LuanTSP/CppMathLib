@@ -37,8 +37,8 @@ Series &Matrix::operator[](int idx) {
   // Checks
   if (idx > this->rows - 1 || idx < -this->rows) {
     std::cout << "ERROR: Index out of range: Tryed to access index " << idx
-              << " of " << "[" << -this->rows << ":" << this->rows - 1
-              << "]" << std::endl;
+              << " of " << "[" << -this->rows << ":" << this->rows - 1 << "]"
+              << std::endl;
     exit(EXIT_FAILURE);
   }
 
