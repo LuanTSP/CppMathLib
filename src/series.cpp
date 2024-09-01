@@ -218,7 +218,7 @@ void Series::print() {
       line += "]";
     }
   }
-  std::cout << line << std::endl;
+  std::cout << line;
 }
 
 int Series::len() { return this->lenght; }

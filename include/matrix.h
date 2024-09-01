@@ -32,7 +32,7 @@ public:
   // Utility
   void print();                // Printing
   Matrix transpose() const;    // Transposition Copy
-  Matrix shape() const;        // Shape as Matrix
+  Series shape() const;        // Shape as Matrix
   std::string shapeAsString(); // Shape as String
 };
 

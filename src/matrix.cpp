@@ -91,9 +91,9 @@ Matrix Matrix::operator/(float other) const {
     exit(EXIT_FAILURE);
   }
 
-  Matrix dims = this->shape();
-  int rows = (int)dims[0][0];
-  int columns = (int)dims[0][1];
+  Series dims = this->shape();
+  int rows = (int)dims[0];
+  int columns = (int)dims[1];
 
   Matrix mat = Matrix(rows, columns);
   for (int i = 0; i < rows; i++) {
@@ -104,9 +104,9 @@ Matrix Matrix::operator/(float other) const {
 }
 
 Matrix operator*(float scale, Matrix &other) {
-  Matrix dims = other.shape();
-  int rows = (int)dims[0][0];
-  int columns = (int)dims[0][1];
+  Series dims = other.shape();
+  int rows = (int)dims[0];
+  int columns = (int)dims[1];
 
   Matrix mat = Matrix(rows, columns);
   for (int i = 0; i < rows; i++) {
@@ -181,9 +181,18 @@ Matrix &Matrix::operator=(const Matrix &other) {
 // Utilities
 void Matrix::print() {
   // Print a formated form of the Matrix
+  std::cout << "[";
   for (int i = 0; i < this->rows; i++) {
+    if (i != 0) {
+      std::cout << " ";
+    }
     this->array[i].print();
+
+    if (i != this->rows - 1) {
+      std::cout << "\n";
+    }
   }
+  std::cout << "]\n";
 }
 
 Matrix Matrix::transpose() const {
@@ -196,10 +205,10 @@ Matrix Matrix::transpose() const {
   return trans;
 }
 
-Matrix Matrix::shape() const {
-  Matrix shape = Matrix(1, 2);
-  shape[0][0] = this->rows;
-  shape[0][1] = this->columns;
+Series Matrix::shape() const {
+  Series shape = Series(2);
+  shape[0] = this->rows;
+  shape[1] = this->columns;
 
   return shape;
 }
