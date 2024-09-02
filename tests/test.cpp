@@ -1,11 +1,12 @@
-#include "../include/list.h"
+#include "../include/tree.h"
 
 int main() {
-  List<std::string> list = List<std::string>();
+  Tree<const char *> tree = Tree<const char *>("Hello");
 
-  list.push_at(0, "Oi");
-  list.push_at(0, "Eu sou o Goku!");
-  list.print();
+  tree.insert("This");
+  tree.insert("Is");
+  tree.insert("a");
+  tree.insert("Message");
 
-  return 0;
+  tree.print();
 }
