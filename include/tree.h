@@ -9,6 +9,8 @@ public:
   TreeNode<T> *right = nullptr;
 
 public:
+  // Constructing
+  TreeNode<T>(){};
   TreeNode<T>(T data) { this->data = data; };
 };
 
@@ -17,28 +19,87 @@ public:
   TreeNode<T> *root = nullptr;
 
 private:
-  void _print(TreeNode<T> *root) {
+  void _deleteSubtree(TreeNode<T> *root) {
+    if (root == nullptr) {
+      return;
+    }
+
+    _deleteSubtree(root->left);
+    _deleteSubtree(root->right);
+
+    delete root;
+  }
+
+  void _printPreorder(TreeNode<T> *root) {
     if (root == nullptr) {
       return;
     }
 
     // Preorder traversal
     std::cout << root->data << std::endl;
-    _print(root->left);
-    _print(root->right);
+    _printPreorder(root->left);
+    _printPreorder(root->right);
+  }
+
+  void _printInorder(TreeNode<T> *root) {
+    if (root == nullptr) {
+      return;
+    }
+
+    // Inorder traversal
+    _printInorder(root->left);
+    std::cout << root->data << std::endl;
+    _printInorder(root->right);
+  }
+
+  void _printPostorder(TreeNode<T> *root) {
+    if (root == nullptr) {
+      return;
+    }
+
+    // Postorder traversal
+    _printPostorder(root->left);
+    _printPostorder(root->right);
+    std::cout << root->data << std::endl;
+  }
+
+  void _printLevel(TreeNode<T> *root, int n) {
+    if (n < 0) {
+      throw "ERROR: Invalid level";
+    }
+
+    if (root == nullptr) {
+      return;
+    }
+
+    if (n == 0) {
+      std::cout << root->data << std::endl;
+      return;
+    }
+
+    _printLevel(root->left, n - 1);
+    _printLevel(root->right, n - 1);
   }
 
 public:
+  // Construction
   Tree<T>(){};
   Tree<T>(T data) { this->root = new TreeNode<T>(data); }
 
-  void print() { _print(this->root); }
+  // Destruction
+  ~Tree<T>() { _deleteSubtree(this->root); }
 
+  // Printing Tree
+  void printTreePreorder() { _printPreorder(this->root); }
+  void printTreeInorder() { _printInorder(this->root); }
+  void printTreePostorder() { _printPostorder(this->root); }
+
+  // Inserting
   void insert(T data) { // Inserts beadth first
     TreeNode<T> *newNode = new TreeNode<T>(data);
 
-    if (!this->root) {
-      this->root == newNode;
+    if (this->root == nullptr) {
+      root = newNode;
       return;
     }
 
@@ -61,4 +122,7 @@ public:
       }
     }
   }
+
+  // Print Level
+  void printLevel(int n) { _printLevel(this->root, n); }
 };
