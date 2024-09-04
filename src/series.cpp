@@ -1,17 +1,23 @@
 #include "../include/series.h"
 #include <cstdlib>
+#include <string>
 
 // Initialization
-Series::Series() {}
+Series::Series() { this->lenght = 0; }
 
 Series::Series(int lenght) {
-  if (lenght < 1) {
+  if (lenght < 0) {
     std::cout << "ERROR: Tryed to create Series of lenght " << lenght
-              << ". Lenght must be grater than one." << std::endl;
+              << ". Lenght must be grater than 0." << std::endl;
     throw "ERROR";
   }
 
   this->lenght = lenght;
+
+  if (lenght == 0) {
+    return;
+  }
+
   float *tmp = new float[lenght];
 
   for (int i = 0; i < lenght; i++) {
@@ -21,7 +27,11 @@ Series::Series(int lenght) {
 }
 
 // Destruction
-Series::~Series() { delete[] this->array; }
+Series::~Series() {
+  if (this->array != nullptr) {
+    delete[] this->array;
+  }
+}
 
 // Overloads
 float &Series::operator[](int idx) {
@@ -208,17 +218,18 @@ float Series::dot(const Series &other) const {
   return tmp;
 }
 
-void Series::print() {
+std::string Series::repr() {
   std::string line = "[";
   for (int i = 0; i < this->lenght; i++) {
     line = line + std::to_string(this->array[i]).substr(0, 4);
     if (i + 1 != this->lenght) {
       line += ", ";
-    } else {
-      line += "]";
     }
   }
-  std::cout << line;
+  line += "]";
+  return line;
 }
+
+void Series::print() { std::cout << this->repr(); }
 
 int Series::len() { return this->lenght; }

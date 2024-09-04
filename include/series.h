@@ -3,7 +3,7 @@
 
 class Series {
 private:
-  int lenght;             // Lenght of data
+  int lenght;         // Lenght of data
   float initializer = 0;  // Initial value for initializarion
   float *array = nullptr; // Arrary Datastructure
 public:
@@ -29,6 +29,7 @@ public:
   float dot(const Series &other) const; // Dot Product
   void print();                         // Printing
   int len();                            // Length
+  std::string repr();
 };
 
 Series operator*(float scale, Series &other); // Global float - Series Operator
