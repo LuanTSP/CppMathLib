@@ -18,7 +18,7 @@ Series::Series(int lenght) {
     return;
   }
 
-  float *tmp = new float[lenght];
+  float* tmp = new float[lenght];
 
   for (int i = 0; i < lenght; i++) {
     tmp[i] = this->initializer;
@@ -44,7 +44,7 @@ float &Series::operator[](int idx) {
   if (idx >= 0) {
     return this->array[idx];
   }
-
+  
   return this->array[this->lenght + idx];
 }
 

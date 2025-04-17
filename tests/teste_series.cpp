@@ -1,39 +1,217 @@
 #include "../include/series.h"
 #include <fstream>
 
-void creation_test(std::ofstream &ofile) {
-  ofile << "### CREATION TEST ###\n";
 
-  // CREATE EMPTY LIST
+// === CREATION TESTS ===
+bool empty_list_creation_test(std::ofstream &ofile) {
+  bool passed = true;
+
   Series s1 = Series();
-  ofile << s1.repr() << "\n";
+  ofile << "Empty list creation test: ";
   if (s1.len() != 0) {
-    std::cout << "ERROR: at 'creation_test' | series created with lenght "
-                 "different than 0"
-              << std::endl;
-    throw "ERROR";
+    std::cerr << "ERROR: at 'empty_list_creation_test' | series created with lenght different than 0" << std::endl;
+    passed = false;
+  } else {
+    ofile << "OK\n";
+  }
+  ofile << "Result: " << s1.repr() << "\n\n";
+  
+  return passed;
+}
+
+bool five_lenght_creation_test(std::ofstream &ofile) {
+  bool passed = true;
+
+  Series s2 = Series(5);
+  ofile << "5 lenght creation test: ";
+  if (s2.len() != 5) {
+    std::cerr << "ERROR: at 'five_lenght_creation_test' | series with size 10 created with lenght different than 10" << std::endl;
+    passed = false;
+  }
+  for (int i = 0; i < 5; i++) {
+    if (s2[i] != 0) {
+      std::cerr << "ERROR: at 'five_lenght_creation_test' | series initialized with values "
+                   "different from 0";
+      passed = false;
+    }
   }
 
-  // CREATE WITH LENGHT
-  Series s2 = Series(10);
-  ofile << s2.repr();
-  if (s2.len() != 10) {
-    std::cout << "ERROR: at 'creation_test' | series with size 10 created with "
-                 "lenght "
-                 "different than 10"
-              << std::endl;
-    throw "ERROR";
+  if (passed) {
+    ofile << "OK\n";
+  } else {
+    ofile << "Failed\n";
   }
-  for (int i = 0; i < 10; i++) {
-    if (s2[i] != 0) {
-      std::cout << "ERROR: at 'creation_test' | series initialized with values "
-                   "different from 0";
-      throw "ERROR";
-    }
+  ofile << "Result: " << s2.repr() << "\n\n";
+  
+  return passed;
+}
+
+void creation_tests(std::ofstream &ofile) {
+  bool passed = true;
+  ofile << "\n=== CREATION TESTS ===\n\n";
+  passed = passed && empty_list_creation_test(ofile);
+  passed = passed && five_lenght_creation_test(ofile);
+  
+  if (passed) {
+    std::cout << "PASSED CREATION TESTS" << std::endl;
   }
 }
 
+// === GET SET ITEM TESTS ===
+bool get_set_positive_index(std::ostream &ofile) {
+  bool passed = true;
+  ofile << "get set positive index test: ";
+  Series s = Series(5);
+  s[1] = 1; s[2] = 2; s[3] = 3; s[4] = 4; // set items
+
+  if (s[0] != 0) passed = false; // get items
+  if (s[1] != 1) passed = false;
+  if (s[2] != 2) passed = false;
+  if (s[3] != 3) passed = false;
+  if (s[4] != 4) passed = false; 
+
+  if (!passed) {
+    std::cerr << "ERROR: at 'get_set_positive_index' | series set data or retrieved data discrepancy\n";
+  }
+
+  if (passed) {
+    ofile << "OK\n";
+  } else {
+    ofile << "Failed\n";
+  }
+
+  ofile << "result: " << s.repr() << "\n\n";
+  return passed;
+}
+
+bool get_set_negative_index(std::ostream &ofile) {
+  bool passed = true;
+  ofile << "get set negative index test: ";
+  Series s = Series(5);
+  s[1] = 1; s[2] = 2; s[3] = 3; s[4] = 4; //set items
+
+  if (s[-5] != 0) passed = false; // get items
+  if (s[-4] != 1) passed = false;
+  if (s[-3] != 2) passed = false;
+  if (s[-2] != 3) passed = false;
+  if (s[-1] != 4) passed = false; 
+
+  if (passed) {
+    ofile << "OK\n";
+  } else {
+    ofile << "Failed\n";
+    std::cerr << "ERROR: at 'get_set_negative_index' | series set data or retrieved data discrepancy\n";
+  }
+
+  ofile << "result: " << s.repr() << "\n\n";
+  return passed;
+}
+
+void get_set_tests(std::ostream &ofile) {
+  bool passed = true;
+  ofile << "\n=== GET SET TESTS ===\n\n";
+
+  passed = passed && get_set_positive_index(ofile);
+  passed = passed && get_set_negative_index(ofile);
+
+  if (passed) {
+    std::cout << "PASSED GET SET TESTS" << std::endl;
+  }
+}
+
+// === ADDITION TESTS ===
+bool series_series_addition(std::ostream &ofile) {
+  bool passed = true;
+  ofile << "series series addition test: ";
+  Series s1 = Series(5); 
+  Series s2 = Series(5);
+  for (int i=0; i < s1.len(); i++) {
+    s1[i] = i;
+    s2[i] = i;
+  }
+
+  Series s3 = s1 + s2;
+  if (s3[0] != 0) passed = false;
+  if (s3[1] != 2) passed = false;
+  if (s3[2] != 4) passed = false;
+  if (s3[3] != 6) passed = false;
+  if (s3[4] != 8) passed = false;
+
+  if (passed) {
+    ofile << "OK\n";
+  } else {
+    ofile << "Failed\n";
+    std::cerr << "ERROR: at 'series_series_addition' | series series addition data with discrepancy\n";
+  }
+  ofile << "result: " << s3.repr() << "\n\n";
+
+  return passed;
+}
+
+void series_addition_tests(std::ostream &ofile) {
+  bool passed = true;
+  ofile << "\n=== SERIES ADDITION TESTS ===\n\n";
+
+  passed = passed && series_series_addition(ofile);
+
+  if (passed) {
+    std::cout << "PASSED SERIES ADDITION TESTS" << std::endl;
+  }
+}
+
+// === SUBTRACTION TESTS ===
+bool series_series_subtraction(std::ostream &ofile) {
+  bool passed = true;
+  ofile << "series series subtraction test: ";
+  Series s1 = Series(5); 
+  Series s2 = Series(5);
+  for (int i=0; i < s1.len(); i++) {
+    s1[i] = i;
+    s2[i] = i * i;
+  }
+
+  Series s3 = s2 - s1;
+  if (s3[0] != 0) passed = false;
+  if (s3[1] != 0) passed = false;
+  if (s3[2] != 2) passed = false;
+  if (s3[3] != 6) passed = false;
+  if (s3[4] != 12) passed = false;
+
+  if (passed) {
+    ofile << "OK\n";
+  } else {
+    ofile << "Failed\n";
+    std::cerr << "ERROR: at 'series_series_subtraction' | series series subtraction data with discrepancy\n";
+  }
+  ofile << "result: " << s3.repr() << "\n\n";
+
+  return passed;
+}
+
+void series_subtraction_tests(std::ostream &ofile) {
+  bool passed = true;
+  ofile << "\n=== SERIES SUBTRACTION TESTS ===\n\n";
+
+  passed = passed && series_series_subtraction(ofile);
+
+  if (passed) {
+    std::cout << "PASSED SERIES SUBTRACTION TESTS" << std::endl;
+  }
+}
+
+
+
 int main() {
-  std::ofstream ofile("test_series.txt");
-  creation_test(ofile);
+  // filepath
+  const char* filepath = "test_series.txt"; 
+  std::ofstream ofile(filepath);
+  
+  // run tests
+  creation_tests(ofile);
+  get_set_tests(ofile);
+  series_addition_tests(ofile);
+  series_subtraction_tests(ofile);
+  
+  // log file console indication
+  std::cout << "=== tests log file written to " << filepath << " ===\n";
 }
