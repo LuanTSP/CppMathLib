@@ -1,4 +1,4 @@
-#include "../include/series.h"
+#include "../include/series.hpp"
 #include <fstream>
 
 
@@ -46,19 +46,19 @@ bool five_lenght_creation_test(std::ofstream &ofile) {
   return passed;
 }
 
-void creation_tests(std::ofstream &ofile) {
+void series_creation_tests(std::ofstream &ofile) {
   bool passed = true;
-  ofile << "\n=== CREATION TESTS ===\n\n";
+  ofile << "\n=== SERIES CREATION TESTS ===\n\n";
   passed = passed && empty_list_creation_test(ofile);
   passed = passed && five_lenght_creation_test(ofile);
   
   if (passed) {
-    std::cout << "PASSED CREATION TESTS" << std::endl;
+    std::cout << "PASSED SERIES CREATION TESTS" << std::endl;
   }
 }
 
 // === GET SET ITEM TESTS ===
-bool get_set_positive_index(std::ostream &ofile) {
+bool series_get_set_positive_index(std::ostream &ofile) {
   bool passed = true;
   ofile << "get set positive index test: ";
   Series s = Series(5);
@@ -111,11 +111,11 @@ void get_set_tests(std::ostream &ofile) {
   bool passed = true;
   ofile << "\n=== GET SET TESTS ===\n\n";
 
-  passed = passed && get_set_positive_index(ofile);
+  passed = passed && series_get_set_positive_index(ofile);
   passed = passed && get_set_negative_index(ofile);
 
   if (passed) {
-    std::cout << "PASSED GET SET TESTS" << std::endl;
+    std::cout << "PASSED SERIES GET SET TESTS" << std::endl;
   }
 }
 
@@ -199,6 +199,182 @@ void series_subtraction_tests(std::ostream &ofile) {
   }
 }
 
+// === MULTIPLICATION TESTS ===
+bool series_series_multiplication(std::ofstream &ofile) {
+  bool passed = true;
+
+  ofile << "series series multiplication test: ";
+  Series s1 = Series(5);
+  s1[0] = 0;
+  s1[1] = 1;
+  s1[2] = 2;
+  s1[3] = 3;
+  s1[4] = 4;
+
+  Series s2 = Series(5);
+  s2[0] = 5;
+  s2[1] = 6;
+  s2[2] = 7;
+  s2[3] = 8;
+  s2[4] = 9;
+
+  Series s3 = s1 * s2;
+  
+  if (s3[0] != 0) passed = false;
+  if (s3[1] != 6) passed = false;
+  if (s3[2] != 14) passed = false;
+  if (s3[3] != 24) passed = false;
+  if (s3[4] != 36) passed = false;
+
+  if (passed) {
+    ofile << "OK\n";
+  } else {
+    ofile << "Failed\n";
+    std::cerr << "ERROR: at 'series_series_multiplication' | series_series_multiplication data with discrepancy\n";
+  }
+  ofile << "result: " << s3.repr() << "\n\n";
+
+  
+  return passed;
+
+}
+
+bool series_float_multiplication(std::ofstream &ofile) {
+  bool passed = true;
+
+  ofile << "series float multiplication test: ";
+  Series s1 = Series(5);
+  s1[0] = 0;
+  s1[1] = 1;
+  s1[2] = 2;
+  s1[3] = 3;
+  s1[4] = 4;
+
+  // teste float * series
+  Series s2 = 2 * s1;
+
+  if (s2[0] != 0) passed = false;
+  if (s2[1] != 2) passed = false;
+  if (s2[2] != 4) passed = false;
+  if (s2[3] != 6) passed = false;
+  if (s2[4] != 8) passed = false;
+
+  // test series * float
+  Series s3 = s1 * 2;
+
+  for (int i=0; i < s3.len(); i++) {
+    if (s3[i] != s2[i]) passed = false;
+  }
+
+  if (passed) {
+    ofile << "OK\n";
+  } else {
+    ofile << "Failed\n";
+    std::cerr << "ERROR: at 'series_float_multiplication' | series_float_multiplication data with discrepancy\n";
+  }
+  ofile << "result: " << s2.repr() << "\n\n";
+
+  
+  return passed;
+}
+
+void series_multiplication_tests(std::ofstream &ofile) {
+  bool passed = true;
+  ofile << "\n=== SERIES MULTIPLICATION TESTS ===\n\n";
+
+  passed = passed && series_series_multiplication(ofile);
+  passed = passed && series_float_multiplication(ofile);
+
+
+  if (passed) {
+    std::cout << "PASSED SERIES MULTIPLICATION TESTS" << std::endl;
+  }
+}
+
+// === DIVISION TESTS ===
+bool series_series_division(std::ofstream &ofile) {
+  bool passed = true;
+
+  ofile << "series series division test: ";
+  Series s1 = Series(5);
+  s1[0] = 0;
+  s1[1] = 1;
+  s1[2] = 2;
+  s1[3] = 3;
+  s1[4] = 4;
+
+  Series s2 = Series(5);
+  s2[0] = 5;
+  s2[1] = 6;
+  s2[2] = 7;
+  s2[3] = 8;
+  s2[4] = 9;
+
+  Series s3 = s1 / s2;
+  
+  if (s3[0] != 0) passed = false;
+  if (s3[1] != (float) 1 / 6) passed = false;
+  if (s3[2] != (float) 2 / 7) passed = false;
+  if (s3[3] != (float) 3 / 8) passed = false;
+  if (s3[4] != (float) 4 / 9) passed = false;
+
+  if (passed) {
+    ofile << "OK\n";
+  } else {
+    ofile << "Failed\n";
+    std::cerr << "ERROR: at 'series_series_division' | series_series_division data with discrepancy\n";
+  }
+  ofile << "result: " << s3.repr() << "\n\n";
+
+  
+  return passed;
+
+}
+
+bool series_float_division(std::ofstream &ofile) {
+  bool passed = true;
+
+  ofile << "series float division test: ";
+  Series s1 = Series(5);
+  s1[0] = 0;
+  s1[1] = 1;
+  s1[2] = 2;
+  s1[3] = 3;
+  s1[4] = 4;
+
+  // teste float * series
+  Series s2 = s1 / 2;
+
+  if (s2[0] != 0) passed = false;
+  if (s2[1] != 0.5) passed = false;
+  if (s2[2] != 1) passed = false;
+  if (s2[3] != 1.5) passed = false;
+  if (s2[4] != 2) passed = false;
+
+  if (passed) {
+    ofile << "OK\n";
+  } else {
+    ofile << "Failed\n";
+    std::cerr << "ERROR: at 'series_float_division' | series_float_division data with discrepancy\n";
+  }
+  ofile << "result: " << s2.repr() << "\n\n";
+
+  
+  return passed;
+}
+
+void series_division_tests(std::ofstream &ofile) {
+  bool passed = true;
+  ofile << "\n=== SERIES DIVISION TESTS ===\n\n";
+
+  passed = passed && series_series_division(ofile);
+  passed = passed && series_float_division(ofile);
+
+
+  if (passed) {
+    std::cout << "PASSED SERIES DIVISION TESTS" << std::endl;
+  }
+}
 
 
 int main() {
@@ -207,10 +383,12 @@ int main() {
   std::ofstream ofile(filepath);
   
   // run tests
-  creation_tests(ofile);
+  series_creation_tests(ofile);
   get_set_tests(ofile);
   series_addition_tests(ofile);
   series_subtraction_tests(ofile);
+  series_multiplication_tests(ofile);
+  series_division_tests(ofile);
   
   // log file console indication
   std::cout << "=== tests log file written to " << filepath << " ===\n";

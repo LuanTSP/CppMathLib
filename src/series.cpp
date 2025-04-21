@@ -1,4 +1,4 @@
-#include "../include/series.h"
+#include "../include/series.hpp"
 #include <cstdlib>
 #include <string>
 

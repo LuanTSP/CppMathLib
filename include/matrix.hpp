@@ -1,5 +1,5 @@
 #pragma once
-#include "../include/series.h"
+#include "../include/series.hpp"
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -31,9 +31,9 @@ public:
 
   // Utility
   void print();                // Printing
+  std::string repr();
   Matrix transpose() const;    // Transposition Copy
   Series shape() const;        // Shape as Matrix
-  std::string shapeAsString(); // Shape as String
 };
 
 // Global overloads

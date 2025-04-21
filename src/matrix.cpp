@@ -1,5 +1,5 @@
-#include "../include/matrix.h"
-#include "../include/series.h"
+#include "../include/matrix.hpp"
+#include "../include/series.hpp"
 #include <cmath>
 #include <cstdlib>
 #include <string>
@@ -181,18 +181,24 @@ Matrix &Matrix::operator=(const Matrix &other) {
 // Utilities
 void Matrix::print() {
   // Print a formated form of the Matrix
-  std::cout << "[";
-  for (int i = 0; i < this->rows; i++) {
-    if (i != 0) {
-      std::cout << " ";
-    }
-    this->array[i].print();
+  std::cout << this->repr() << std::endl;
+}
 
+std::string Matrix::repr() {
+  std::string s = "[";
+  for (int i=0; i < this->rows; i++) {
+    if (i != 0) {
+      s += " ";
+    }
+    s += this->array[i].repr();
+    
     if (i != this->rows - 1) {
-      std::cout << "\n";
+      s += "\n";
     }
   }
-  std::cout << "]\n";
+  s += "]";
+
+  return s;
 }
 
 Matrix Matrix::transpose() const {
@@ -210,11 +216,5 @@ Series Matrix::shape() const {
   shape[0] = this->rows;
   shape[1] = this->columns;
 
-  return shape;
-}
-
-std::string Matrix::shapeAsString() {
-  std::string shape = "(" + std::to_string(this->rows) + "," +
-                      std::to_string(this->columns) + ")";
   return shape;
 }

@@ -3,8 +3,6 @@
 
 # run program with memory verification
 
-g++ tests/teste.cpp -o build/tests/teste
+g++ main.cpp -o main
 
-cd build/tests
-./teste
-cd ..
+./main
