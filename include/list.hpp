@@ -70,6 +70,42 @@ class List {
       std::cout << "]\n";
     }
     
+    List filter(bool (*func)(T value)) {
+      ListNode<T>* node = this->nodes;
+      List found = List<T>();
+      while(node != nullptr) {
+        T data = node->data;
+        if (func(node->data)) found.push_back(data);
+        
+        node = node->next;
+      }
+
+      return found;
+    }
+
+    List reverse() {
+      List reversed = List<T>();
+      ListNode<T>* node = this->nodes;
+
+      while (node != nullptr) {
+        reversed.push_begin(node->data);
+        node = node->next;
+      }
+
+      return reversed;
+    }
+
+    List copy() {
+      List copy_list = List<T>();
+      ListNode<T>* node = this->nodes;
+      while (node != nullptr) {
+        copy_list.push_back(node->data);
+        node = node->next;
+      }
+
+      return copy_list;
+    }
+    
     List& push_back(T value) {
       if (this->lenght == 0) {
         ListNode<T> *newNode = new ListNode<T>();
@@ -110,12 +146,19 @@ class List {
       return *this;
     }
     
-    List& push_at(int idx, T value) {
+    List& insert(int idx, T value) {
       // Check valid index
       lenght = this->len();
 
       if (idx < 0) {
         idx += lenght;
+      }
+
+      // Add to list if insert(-1, "value") when empty list
+      if (idx == -1 && lenght == 0) {
+        this->push_begin(value);
+
+        return *this;
       }
 
       if (idx < 0 || idx > lenght) {
@@ -184,7 +227,7 @@ class List {
       return *this;
     }
 
-    List& pop_begin() {
+    List& pop_front() {
       // Handle empty list
       if (this->nodes == nullptr) {
         return *this;
@@ -208,7 +251,146 @@ class List {
       return *this;
     }
     
+    List& remove(int idx) {
+      // Check valid index
+      lenght = this->len();
+
+      if (idx < 0) {
+        idx += lenght;
+      }
+
+      if (idx < 0 || idx > lenght) {
+        throw "ERROR: Invalix Index";
+      }
+
+      if (idx == 0) {this->pop_begin(); 
+        return *this;
+      }
+      
+      if (idx == lenght - 1) {
+        this->pop_back();
+        return *this;
+      }
+      
+      ListNode<T>* curr = this->nodes;
+      for (int i=0; i < idx; i++) {
+        curr = curr->next;
+      }
+
+      if (curr->prev != nullptr) curr->prev->next = curr->next;
+      if (curr->next != nullptr) curr->next->prev = curr->prev;
+      delete curr;
+
+      this->lenght--;
+      return *this;
+    }
+    
+    List& sort_inplace(bool (*func)(T a, T b), bool reverse = false) {
+
+      if (this->lenght == 1 || this->lenght == 0) {
+        return *this;
+      }
+      
+      ListNode<T>* node = this->nodes;
+
+      if (reverse) {
+        while (node->next != nullptr) {
+          // switch;
+          if (!func(node->data, node->next->data)) {
+            int c = node->data;
+            node->data = node->next->data; 
+            node->next->data = c;
+            node = this->nodes;
+          }
+      
+          node = node->next;
+        }
+      } else {
+        while (node->next != nullptr) {
+          // switch;
+          if (func(node->data, node->next->data)) {
+            int c = node->data;
+            node->data = node->next->data; 
+            node->next->data = c;
+            node = this->nodes;
+          }
+      
+          node = node->next;
+        }
+      }
+      
+    
+      return *this;
+    }
+
+    List& reverse_inplace() {
+      ListNode<T>* curr = this->nodes;
+      
+      while (curr != nullptr) {
+        ListNode<T>* next = curr->next;
+        ListNode<T>* prev = curr->prev;
+        
+        ListNode<T>* tmp = next;
+        next = prev;
+        prev = tmp;
+        
+        curr->next = next;
+        curr->prev = prev;
+
+        this->nodes = curr;
+        curr = curr->prev;
+      }
+      
+      return *this;
+    }
+
+    List& clear() {
+      ListNode<T>* node = this->nodes;
+      if (node != nullptr) {
+        while (node->next != nullptr) {
+          node = node->next;
+          delete node->prev;
+        }
+
+        delete node;
+      }
+
+      this->nodes = nullptr;
+
+      return *this;
+    }
+    
+    List& for_each(T (*func)(T value)) {
+      ListNode<T>* node = this->nodes;
+      while(node != nullptr) {
+        T data = node->data;
+        node->data = func(data);
+        node = node->next;
+      }
+
+      return *this;
+    }
+
     int len() { return this->lenght; }
+
+    int find(int value) {
+      if (this->nodes == nullptr) {
+        return false;
+      }
+      ListNode<T> *node = this->nodes;
+      int idx = 0;
+      while (true) {
+        if (node->data == value) {
+          return idx;
+        }
+
+        if (node->next == nullptr) {
+          return -1;
+        }
+        node = node->next;
+        idx++;
+      }
+    }
 
     bool contains(T value) {
 
@@ -228,41 +410,9 @@ class List {
       }
     }
 
-    List& sort(bool (*criterium)(T a, T b), bool reverse = false) {
-
-      if (this->lenght == 1 || this->lenght == 0) {
-        return *this;
-      }
-      
-      ListNode<T>* node = this->nodes;
-
-      if (reverse) {
-        while (node->next != nullptr) {
-          // switch;
-          if (!criterium(node->data, node->next->data)) {
-            int c = node->data;
-            node->data = node->next->data; 
-            node->next->data = c;
-            node = this->nodes;
-          }
-      
-          node = node->next;
-        }
-      } else {
-        while (node->next != nullptr) {
-          // switch;
-          if (criterium(node->data, node->next->data)) {
-            int c = node->data;
-            node->data = node->next->data; 
-            node->next->data = c;
-            node = this->nodes;
-          }
-      
-          node = node->next;
-        }
-      }
-      
-    
-      return *this;
+    bool empty() {
+      if (this->nodes == nullptr) return true;
+      return false;
     }
+
   };
