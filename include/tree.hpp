@@ -2,127 +2,175 @@
 #include <iostream>
 #include <queue>
 
-template <typename T> class TreeNode {
+template <typename T> class BSTreeNode {
 public:
   T data;
-  TreeNode<T> *left = nullptr;
-  TreeNode<T> *right = nullptr;
+  BSTreeNode<T> *left = nullptr;
+  BSTreeNode<T> *right = nullptr;
 
 public:
   // Constructing
-  TreeNode<T>(){};
-  TreeNode<T>(T data) { this->data = data; };
+  BSTreeNode<T>(){};
+  BSTreeNode<T>(T data) { this->data = data; };
 };
 
-template <typename T> class Tree {
-public:
-  TreeNode<T> *root = nullptr;
+template <typename T> class BSTree {
+private:
+  BSTreeNode<T> *root = nullptr;
+  
+  bool (*func)(T a, T b);
+
+  int lenght = 0;
 
 private:
-  void _deleteSubtree(TreeNode<T> *root) {
-    if (root == nullptr) {
-      return;
-    }
-
-    _deleteSubtree(root->left);
-    _deleteSubtree(root->right);
-
-    delete root;
-  }
-
-  void _printPreorder(TreeNode<T> *root) {
-    if (root == nullptr) {
-      return;
-    }
-
-    // Preorder traversal
-    std::cout << root->data << std::endl;
-    _printPreorder(root->left);
-    _printPreorder(root->right);
-  }
-
-  void _printInorder(TreeNode<T> *root) {
-    if (root == nullptr) {
-      return;
-    }
-
-    // Inorder traversal
-    _printInorder(root->left);
-    std::cout << root->data << std::endl;
-    _printInorder(root->right);
-  }
-
-  void _printPostorder(TreeNode<T> *root) {
-    if (root == nullptr) {
-      return;
-    }
-
-    // Postorder traversal
-    _printPostorder(root->left);
-    _printPostorder(root->right);
-    std::cout << root->data << std::endl;
-  }
-
-  void _printLevel(TreeNode<T> *root, int n) {
+  void _print_level(BSTreeNode<T>* start_node, int n) {
     if (n < 0) {
       throw "ERROR: Invalid level";
     }
 
-    if (root == nullptr) {
+    if (start_node == nullptr) {
       return;
     }
 
     if (n == 0) {
-      std::cout << root->data << std::endl;
+      std::cout << start_node->data << std::endl;
       return;
     }
 
-    _printLevel(root->left, n - 1);
-    _printLevel(root->right, n - 1);
+    _print_level(start_node->left, n - 1);
+    _print_level(start_node->right, n - 1);
+  }
+  
+  void _print_preorder(BSTreeNode<T> *node) {
+    if (node == nullptr) {
+      return;
+    }
+
+    // Preorder traversal
+    std::cout << node->data << std::endl;
+    _print_preorder(node->left);
+    _print_preorder(node->right);
   }
 
-public:
+  void _print_inorder(BSTreeNode<T> *node) {
+    if (node == nullptr) {
+      return;
+    }
+
+    // Inorder traversal
+    _print_inorder(node->left);
+    std::cout << node->data << std::endl;
+    _print_inorder(node->right);
+  }
+
+  void _print_postorder(BSTreeNode<T> *node) {
+    if (node == nullptr) {
+      return;
+    }
+
+    // Postorder traversal
+    _print_postorder(node->left);
+    _print_postorder(node->right);
+    std::cout << node->data << std::endl;
+  }
+
+  void _insert(BSTreeNode<T>*& node, T value) {
+    if (node == nullptr) {
+      node = new BSTreeNode<T>(value);
+      return;
+    }
+
+    if (this->func(node->data, value)) {
+      _insert(node->left, value);
+    } else {
+      _insert(node->right, value);
+    }
+  }
+
+  BSTreeNode<T>* _find_node(BSTreeNode<T>*& node, T value) {
+    if (node == nullptr) {
+      return nullptr;
+    }
+
+    if (node->data == value) {
+      return node; 
+    }
+
+    if (this->func(node->data, value)) return _find_node(node->left, value);
+    else return _find_node(node->right, value);
+  }
+  
+  int _height(BSTreeNode<T>*& node) {
+    if (node == nullptr) {
+      return 0;
+    }
+
+    int height_left = _height(node->left);
+    int height_right = _height(node->right);
+
+    return (height_right > height_left) ? 1 + height_right : 1 + height_left;
+  }
+  
+  public:
   // Construction
-  Tree<T>(){};
-  Tree<T>(T data) { this->root = new TreeNode<T>(data); }
+  BSTree<T>(bool (*func)(T a, T b)){ this->func = func; };
+  
+  BSTree<T>(bool (*func)(T a, T b), T data){ 
+    this->func = func; 
+    this->root = new BSTreeNode<T>(data);
+    this->lenght++;
+  };
 
   // Destruction
-  ~Tree<T>() { _deleteSubtree(this->root); }
-
-  // Printing Tree
-  void printTreePreorder() { _printPreorder(this->root); }
-  void printTreeInorder() { _printInorder(this->root); }
-  void printTreePostorder() { _printPostorder(this->root); }
-
-  // Inserting
-  void insert(T data) { // Inserts beadth first
-    TreeNode<T> *newNode = new TreeNode<T>(data);
-
-    if (this->root == nullptr) {
-      root = newNode;
+  void delete_subtree(BSTreeNode<T> *node) {
+    if (node == nullptr) {
       return;
     }
 
-    std::queue<TreeNode<T> *> queue;
-    queue.push(this->root);
+    delete_subtree(node->left);
+    delete_subtree(node->right);
 
-    while (!queue.empty()) {
-      TreeNode<T> *curr = queue.front();
-      queue.pop();
+    delete node;
+  }
+ 
+  ~BSTree<T>() { this->delete_subtree(this->root); }
 
-      if (curr->left == nullptr) {
-        curr->left = newNode;
-        break;
-      } else if (curr->right == nullptr) {
-        curr->right = newNode;
-        break;
-      } else {
-        queue.push(curr->left);
-        queue.push(curr->right);
-      }
-    }
+  // Printing Tree
+  void print_preorder() { this->_print_preorder(this->root); }
+  
+  void print_inorder() { this->_print_inorder(this->root); }
+  
+  void print_postorder() { this->_print_postorder(this->root); }
+
+  void print_level(int n) { _print_level(this->root, n); }
+
+  // Inserting
+  BSTree& insert(T value) { 
+    _insert(this->root, value);
+    this->lenght++;
+    return *this;
   }
 
-  // Print Level
-  void printLevel(int n) { _printLevel(this->root, n); }
+  // Searching
+  BSTreeNode<T>* find_node(T value) {
+    return _find_node(this->root, value);
+  }
+
+  // Utility
+  bool contains(T value) {
+    if (this->find_node(value) != nullptr) {
+      return true;
+    }
+
+    return false;
+  }
+
+  int height() {
+    return _height(this->root);
+  }
+
+  int len() {
+    return this->lenght;
+  }
+
 };

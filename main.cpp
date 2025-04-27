@@ -1,19 +1,20 @@
 #include "include/matrix.hpp"
 #include "include/list.hpp"
+#include "include/tree.hpp"
 #include <iostream>
-#include <array>
-#include <vector>
 
-bool even(int v) {
-  return v % 2 == 0;
+bool greater(int a, int b) {
+  return a > b;
+}
+
+bool lesser(int a, int b) {
+  return a < b;
 }
 
 int main() {
-  List list = List<int>();
-  list.push_back(1).push_back(2).push_back(3).push_back(4);
-  list.print();
-  List<int> reversed = list.reverse().reverse().reverse();
-  reversed.print();
-  list.reverse_inplace();
-  list.print();
+  BSTree tree = BSTree<int>(greater);
+
+  tree.insert(1).insert(2).insert(0).insert(10);
+  
+  std::cout << tree.height() << std::endl;
 }
