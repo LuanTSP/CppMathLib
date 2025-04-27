@@ -20,10 +20,10 @@ private:
   
   bool (*func)(T a, T b);
 
-  int lenght = 0;
+  int length = 0;
 
 private:
-  void _print_level(BSTreeNode<T>* start_node, int n) {
+  void _print_level(BSTreeNode<T>* start_node, int n, std::string& prefix) {
     if (n < 0) {
       throw "ERROR: Invalid level";
     }
@@ -33,12 +33,12 @@ private:
     }
 
     if (n == 0) {
-      std::cout << start_node->data << std::endl;
+      prefix += std::to_string(start_node->data) + " ";
       return;
     }
 
-    _print_level(start_node->left, n - 1);
-    _print_level(start_node->right, n - 1);
+    _print_level(start_node->left, n - 1, prefix);
+    _print_level(start_node->right, n - 1, prefix);
   }
   
   void _print_preorder(BSTreeNode<T> *node) {
@@ -111,6 +111,50 @@ private:
     return (height_right > height_left) ? 1 + height_right : 1 + height_left;
   }
   
+  BSTreeNode<T>* _remove(BSTreeNode<T>* node, T value) {
+    if (node == nullptr) {
+      return nullptr;
+    }
+
+    if (node->data == value) {
+      // Case 1: Leaf node
+      if (node->left == nullptr && node->right == nullptr) {
+        delete node;
+        this->length--;
+        return nullptr;
+      }
+      // Case 2: One child
+      if (node->left == nullptr) {
+        BSTreeNode<T>* temp = node->right;
+        delete node;
+        this->length--;
+        return temp;
+      }
+      if (node->right == nullptr) {
+        BSTreeNode<T>* temp = node->left;
+        delete node;
+        this->length--;
+        return temp;
+      }
+      // Case 3: Two children
+      // Find the smallest node in right subtree
+      BSTreeNode<T>* successor = node->right;
+      while (successor->left != nullptr) {
+        successor = successor->left;
+      }
+      node->data = successor->data;
+      node->right = _remove(node->right, successor->data);
+    }
+    else if (this->func(node->data, value)) {
+      node->left = _remove(node->left, value);
+    }
+    else {
+      node->right = _remove(node->right, value);
+    }
+
+    return node;
+  }
+
   public:
   // Construction
   BSTree<T>(bool (*func)(T a, T b)){ this->func = func; };
@@ -118,7 +162,7 @@ private:
   BSTree<T>(bool (*func)(T a, T b), T data){ 
     this->func = func; 
     this->root = new BSTreeNode<T>(data);
-    this->lenght++;
+    this->length++;
   };
 
   // Destruction
@@ -142,12 +186,22 @@ private:
   
   void print_postorder() { this->_print_postorder(this->root); }
 
-  void print_level(int n) { _print_level(this->root, n); }
+  void print_level(int n) {
+    std::string prefix = ""; 
+    _print_level(this->root, n, prefix);
+    std::cout << prefix << std::endl; 
+  }
 
   // Inserting
   BSTree& insert(T value) { 
     _insert(this->root, value);
-    this->lenght++;
+    this->length++;
+    return *this;
+  }
+
+	// Removing
+  BSTree& remove(T value) {
+    this->root = _remove(this->root, value);
     return *this;
   }
 
@@ -170,7 +224,7 @@ private:
   }
 
   int len() {
-    return this->lenght;
+    return this->length;
   }
 
 };

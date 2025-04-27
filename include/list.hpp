@@ -17,7 +17,7 @@ class ListNode {
 template <typename T> 
 class List {
   ListNode<T> *nodes = nullptr;
-  int lenght = 0;
+  int length = 0;
 
   public:
     // Initialization
@@ -38,7 +38,7 @@ class List {
     
     // Overloads
     T& operator[](const int idx) {
-      if (idx < 0 || idx >= this->lenght) {
+      if (idx < 0 || idx >= this->length) {
         throw "ERROR: Invalid Index";
       }
 
@@ -107,11 +107,11 @@ class List {
     }
     
     List& push_back(T value) {
-      if (this->lenght == 0) {
+      if (this->length == 0) {
         ListNode<T> *newNode = new ListNode<T>();
         newNode->data = value;
         this->nodes = newNode;
-        this->lenght = 1;
+        this->length = 1;
       } else {
         ListNode<T> *node = this->nodes;
         while (node->next != nullptr) {
@@ -122,7 +122,7 @@ class List {
         newNode->data = value;
         newNode->prev = node;
         node->next = newNode;
-        this->lenght += 1;
+        this->length += 1;
       }
 
       return *this;
@@ -134,34 +134,34 @@ class List {
       // handle empty list
       if (this->nodes == nullptr) {
         this->nodes = node;
-        this->lenght++;
+        this->length++;
         return *this;
       }
 
       node->next = this->nodes;
       this->nodes->prev = node;
       this->nodes = node;
-      this->lenght++;
+      this->length++;
 
       return *this;
     }
     
     List& insert(int idx, T value) {
       // Check valid index
-      lenght = this->len();
+      length = this->len();
 
       if (idx < 0) {
-        idx += lenght;
+        idx += length;
       }
 
       // Add to list if insert(-1, "value") when empty list
-      if (idx == -1 && lenght == 0) {
+      if (idx == -1 && length == 0) {
         this->push_begin(value);
 
         return *this;
       }
 
-      if (idx < 0 || idx > lenght) {
+      if (idx < 0 || idx > length) {
         throw "ERROR: Invalix Index";
       }
 
@@ -170,7 +170,7 @@ class List {
         if (idx == 0) {
           ListNode<T> *newNode = new ListNode<T>(value);
           this->nodes = newNode;
-          this->lenght++;
+          this->length++;
         } else {
           throw "ERROR: Invalid Index";
         }
@@ -184,7 +184,7 @@ class List {
       }
 
       // handle insert at end;
-      if (idx == this->lenght) {
+      if (idx == this->length) {
         this->push_back(value);
         return *this;
       }
@@ -200,7 +200,7 @@ class List {
       newNode->next = node;
       node->prev->next = newNode;
       node->prev = newNode;
-      this->lenght++;
+      this->length++;
 
       return *this;
     }
@@ -222,7 +222,7 @@ class List {
         this->nodes = nullptr;
       }
       delete node;
-      this->lenght -= 1;
+      this->length -= 1;
 
       return *this;
     }
@@ -234,9 +234,9 @@ class List {
       }
       
       // Handle list with one node
-      if (this->lenght == 1) { // lenght == 1
+      if (this->length == 1) { // length == 1
         delete this->nodes;
-        this->lenght--;
+        this->length--;
         this->nodes = nullptr;
         return *this;
       }
@@ -246,20 +246,20 @@ class List {
       ListNode<T>* node = this->nodes;
       this->nodes = this->nodes->next;
       this->nodes->prev = nullptr;
-      this->lenght--;
+      this->length--;
       delete node;
       return *this;
     }
     
     List& remove(int idx) {
       // Check valid index
-      lenght = this->len();
+      length = this->len();
 
       if (idx < 0) {
-        idx += lenght;
+        idx += length;
       }
 
-      if (idx < 0 || idx > lenght) {
+      if (idx < 0 || idx > length) {
         throw "ERROR: Invalix Index";
       }
 
@@ -267,7 +267,7 @@ class List {
         return *this;
       }
       
-      if (idx == lenght - 1) {
+      if (idx == length - 1) {
         this->pop_back();
         return *this;
       }
@@ -281,13 +281,13 @@ class List {
       if (curr->next != nullptr) curr->next->prev = curr->prev;
       delete curr;
 
-      this->lenght--;
+      this->length--;
       return *this;
     }
     
     List& sort_inplace(bool (*func)(T a, T b), bool reverse = false) {
 
-      if (this->lenght == 1 || this->lenght == 0) {
+      if (this->length == 1 || this->length == 0) {
         return *this;
       }
       
@@ -371,7 +371,7 @@ class List {
       return *this;
     }
 
-    int len() { return this->lenght; }
+    int len() { return this->length; }
 
     int find(int value) {
       if (this->nodes == nullptr) {

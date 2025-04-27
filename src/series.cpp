@@ -3,24 +3,24 @@
 #include <string>
 
 // Initialization
-Series::Series() { this->lenght = 0; }
+Series::Series() { this->length = 0; }
 
-Series::Series(int lenght) {
-  if (lenght < 0) {
-    std::cout << "ERROR: Tryed to create Series of lenght " << lenght
+Series::Series(int length) {
+  if (length < 0) {
+    std::cout << "ERROR: Tryed to create Series of length " << length
               << ". Lenght must be grater than 0." << std::endl;
     throw "ERROR";
   }
 
-  this->lenght = lenght;
+  this->length = length;
 
-  if (lenght == 0) {
+  if (length == 0) {
     return;
   }
 
-  float* tmp = new float[lenght];
+  float* tmp = new float[length];
 
-  for (int i = 0; i < lenght; i++) {
+  for (int i = 0; i < length; i++) {
     tmp[i] = this->initializer;
   }
   this->array = tmp;
@@ -35,9 +35,9 @@ Series::~Series() {
 
 // Overloads
 float &Series::operator[](int idx) {
-  if (idx > this->lenght - 1 || idx < -this->lenght) {
+  if (idx > this->length - 1 || idx < -this->length) {
     std::cout << "ERROR: Index out of range: Tryed to access index " << idx
-              << " of " << "[" << -this->lenght << ":" << this->lenght - 1
+              << " of " << "[" << -this->length << ":" << this->length - 1
               << "]" << std::endl;
     throw "ERROR";
   }
@@ -45,18 +45,18 @@ float &Series::operator[](int idx) {
     return this->array[idx];
   }
   
-  return this->array[this->lenght + idx];
+  return this->array[this->length + idx];
 }
 
 Series Series::operator+(const Series &other) const {
-  if (other.lenght != this->lenght) {
-    std::cout << "ERROR: Tryed to add Series of dimensions " << this->lenght
-              << " and " << other.lenght << std::endl;
+  if (other.length != this->length) {
+    std::cout << "ERROR: Tryed to add Series of dimensions " << this->length
+              << " and " << other.length << std::endl;
     throw "ERROR";
   }
 
-  Series tmp = Series(this->lenght);
-  for (int i = 0; i < this->lenght; i++) {
+  Series tmp = Series(this->length);
+  for (int i = 0; i < this->length; i++) {
     tmp[i] = this->array[i] + other.array[i];
   }
 
@@ -64,14 +64,14 @@ Series Series::operator+(const Series &other) const {
 }
 
 Series Series::operator-(const Series &other) const {
-  if (other.lenght != this->lenght) {
+  if (other.length != this->length) {
     std::cout << "ERROR: Tryed to subtract Series of dimensions "
-              << this->lenght << " and " << other.lenght << std::endl;
+              << this->length << " and " << other.length << std::endl;
     throw "ERROR";
   }
 
-  Series tmp = Series(this->lenght);
-  for (int i = 0; i < this->lenght; i++) {
+  Series tmp = Series(this->length);
+  for (int i = 0; i < this->length; i++) {
     tmp[i] = this->array[i] - other.array[i];
   }
 
@@ -79,15 +79,15 @@ Series Series::operator-(const Series &other) const {
 }
 
 Series Series::operator*(const Series &other) const {
-  if (other.lenght != this->lenght) {
+  if (other.length != this->length) {
     std::cout
         << "ERROR: Tryed to perform multiplication of Series of dimensions "
-        << this->lenght << " and " << other.lenght << std::endl;
+        << this->length << " and " << other.length << std::endl;
     throw "ERROR";
   }
 
-  Series tmp = Series(this->lenght);
-  for (int i = 0; i < this->lenght; i++) {
+  Series tmp = Series(this->length);
+  for (int i = 0; i < this->length; i++) {
     tmp.array[i] = this->array[i] * other.array[i];
   }
 
@@ -95,8 +95,8 @@ Series Series::operator*(const Series &other) const {
 }
 
 Series Series::operator*(float other) const {
-  Series tmp = Series(this->lenght);
-  for (int i = 0; i < this->lenght; i++) {
+  Series tmp = Series(this->length);
+  for (int i = 0; i < this->length; i++) {
     tmp.array[i] = this->array[i] * other;
   }
 
@@ -115,14 +115,14 @@ Series operator*(float scale, Series &other) {
 }
 
 Series Series::operator/(const Series &other) const {
-  if (other.lenght != this->lenght) {
+  if (other.length != this->length) {
     std::cout << "ERROR: Tryed to perform dot product of Series of dimensions "
-              << this->lenght << " and " << other.lenght << std::endl;
+              << this->length << " and " << other.length << std::endl;
     throw "ERROR";
   }
 
-  Series tmp = Series(this->lenght);
-  for (int i = 0; i < this->lenght; i++) {
+  Series tmp = Series(this->length);
+  for (int i = 0; i < this->length; i++) {
     if (other.array[i] == 0) {
       std::cout << "ERROR: Division by zero in series / series division"
                 << std::endl;
@@ -140,8 +140,8 @@ Series Series::operator/(float other) const {
     throw "ERROR";
   }
 
-  Series tmp = Series(this->lenght);
-  for (int i = 0; i < this->lenght; i++) {
+  Series tmp = Series(this->length);
+  for (int i = 0; i < this->length; i++) {
     tmp.array[i] = this->array[i] / other;
   }
 
@@ -153,13 +153,13 @@ Series &Series::operator=(const Series &other) {
   delete[] this->array;
 
   // Make new Series and return
-  this->array = new float[other.lenght];
-  for (int i = 0; i < other.lenght; i++) {
+  this->array = new float[other.length];
+  for (int i = 0; i < other.length; i++) {
     this->array[i] = other.array[i];
   }
 
-  // Set lenght
-  this->lenght = other.lenght;
+  // Set length
+  this->length = other.length;
 
   return *this;
 }
@@ -167,8 +167,8 @@ Series &Series::operator=(const Series &other) {
 // Utility
 Series Series::slice(int start, int end) const {
   // Check for valid inputs of start and end positions
-  bool validStart = (start >= -this->lenght && start < this->lenght);
-  bool validEnd = (end >= -this->lenght && end <= this->lenght);
+  bool validStart = (start >= -this->length && start < this->length);
+  bool validEnd = (end >= -this->length && end <= this->length);
 
   if (!validStart || !validEnd) {
     std::cout << "ERROR: Invalid slice" << std::endl;
@@ -176,10 +176,10 @@ Series Series::slice(int start, int end) const {
   }
 
   if (start < 0) {
-    start = this->lenght + start;
+    start = this->length + start;
   }
   if (end < 0) {
-    end = this->lenght + end;
+    end = this->length + end;
   }
 
   // Slicing
@@ -204,14 +204,14 @@ Series Series::slice(int start, int end) const {
 }
 
 float Series::dot(const Series &other) const {
-  if (other.lenght != this->lenght) {
+  if (other.length != this->length) {
     std::cout << "ERROR: Tryed to perform dot product of Series of dimensions "
-              << this->lenght << " and " << other.lenght << std::endl;
+              << this->length << " and " << other.length << std::endl;
     throw "ERROR";
   }
 
   float tmp = 0;
-  for (int i = 0; i < this->lenght; i++) {
+  for (int i = 0; i < this->length; i++) {
     tmp += this->array[i] * other.array[i];
   }
 
@@ -220,9 +220,9 @@ float Series::dot(const Series &other) const {
 
 std::string Series::repr() {
   std::string line = "[";
-  for (int i = 0; i < this->lenght; i++) {
+  for (int i = 0; i < this->length; i++) {
     line = line + std::to_string(this->array[i]).substr(0, 4);
-    if (i + 1 != this->lenght) {
+    if (i + 1 != this->length) {
       line += ", ";
     }
   }
@@ -232,4 +232,4 @@ std::string Series::repr() {
 
 void Series::print() { std::cout << this->repr(); }
 
-int Series::len() { return this->lenght; }
+int Series::len() { return this->length; }

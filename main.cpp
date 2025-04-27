@@ -2,19 +2,27 @@
 #include "include/list.hpp"
 #include "include/tree.hpp"
 #include <iostream>
+#include <vector>
 
-bool greater(int a, int b) {
-  return a > b;
-}
-
-bool lesser(int a, int b) {
-  return a < b;
-}
+class teste {
+public:
+  teste() {}
+  
+  // Make it friend if you define inside class
+  friend std::ostream& operator<<(std::ostream& os, const teste& t) {
+    os << "Mamamia";
+    return os;
+  }
+}; // <<< SEMICOLON after class
 
 int main() {
-  BSTree tree = BSTree<int>(greater);
-
-  tree.insert(1).insert(2).insert(0).insert(10);
+  // Matrix mat = Matrix(2, 2); // <-- This will cause an error if Matrix isn't defined
+  std::vector<float> vec;
+  vec.push_back(-21);
   
-  std::cout << tree.height() << std::endl;
+  std::cout << vec.at(0) << std::endl;
+  std::cout << vec.capacity() << "\n";
+  
+  teste t;
+  std::cout << t << std::endl;
 }

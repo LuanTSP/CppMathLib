@@ -3,13 +3,13 @@
 
 class Series {
 private:
-  int lenght;         // Lenght of data
+  int length;         // Lenght of data
   float initializer = 0;  // Initial value for initializarion
   float *array = nullptr; // Arrary Datastructure
 public:
   // Initialization
   Series();           // Initialization
-  Series(int lenght); // Initialization with length
+  Series(int length); // Initialization with length
 
   // Destruction
   ~Series(); // Destruction

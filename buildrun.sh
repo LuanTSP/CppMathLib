@@ -3,6 +3,6 @@
 
 # run program with memory verification
 
-g++ main.cpp -o main
+g++ main.cpp src/matrix.cpp src/series.cpp -o main
 
 ./main

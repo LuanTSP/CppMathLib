@@ -53,6 +53,8 @@
     "typeinfo": "cpp",
     "variant": "cpp",
     "text_encoding": "cpp",
-    "queue": "cpp"
+    "queue": "cpp",
+    "cstring": "cpp",
+    "list": "cpp"
   }
 }

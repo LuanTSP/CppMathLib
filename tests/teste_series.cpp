@@ -9,7 +9,7 @@ bool empty_list_creation_test(std::ofstream &ofile) {
   Series s1 = Series();
   ofile << "Empty list creation test: ";
   if (s1.len() != 0) {
-    std::cerr << "ERROR: at 'empty_list_creation_test' | series created with lenght different than 0" << std::endl;
+    std::cerr << "ERROR: at 'empty_list_creation_test' | series created with length different than 0" << std::endl;
     passed = false;
   } else {
     ofile << "OK\n";
@@ -23,9 +23,9 @@ bool five_lenght_creation_test(std::ofstream &ofile) {
   bool passed = true;
 
   Series s2 = Series(5);
-  ofile << "5 lenght creation test: ";
+  ofile << "5 length creation test: ";
   if (s2.len() != 5) {
-    std::cerr << "ERROR: at 'five_lenght_creation_test' | series with size 10 created with lenght different than 10" << std::endl;
+    std::cerr << "ERROR: at 'five_lenght_creation_test' | series with size 10 created with length different than 10" << std::endl;
     passed = false;
   }
   for (int i = 0; i < 5; i++) {
