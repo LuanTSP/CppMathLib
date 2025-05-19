@@ -3,7 +3,7 @@
 #include <queue>
 
 
-namespace cppmath {
+namespace luan {
   template <typename T> class BSTreeNode {
   public:
     T data;

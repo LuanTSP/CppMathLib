@@ -1,10 +1,10 @@
 #pragma once
-#include "../include/series.hpp"
+#include "series.hpp"
 #include <cstdlib>
 #include <iostream>
 #include <string>
 
-namespace cppmath {
+namespace luan {
   class Matrix {
   private:
     float initializer = 0;   // Initial value for initializarion

@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 
-namespace cppmath {
+namespace luan {
   class Series {
   private:
     int length;         // Lenght of data

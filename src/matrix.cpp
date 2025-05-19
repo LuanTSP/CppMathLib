@@ -1,10 +1,10 @@
-#include "../include/matrix.hpp"
-#include "../include/series.hpp"
+#include "../include/luan/matrix.hpp"
+#include "../include/luan/series.hpp"
 #include <cmath>
 #include <cstdlib>
 #include <string>
 
-namespace cppmath {
+namespace luan {
   // Initialization
   Matrix::Matrix(){};
 

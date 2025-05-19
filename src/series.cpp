@@ -1,9 +1,9 @@
-#include "../include/series.hpp"
+#include "../include/luan/series.hpp"
 #include <cstdlib>
 #include <string>
 
 
-namespace cppmath {
+namespace luan {
   // Initialization
   Series::Series() { this->length = 0; }
 
