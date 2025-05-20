@@ -1,5 +1,5 @@
-#include "../include/luan/matrix.hpp"
-#include "../include/luan/series.hpp"
+#include "../include/matrix.hpp"
+#include "../include/series.hpp"
 #include <cmath>
 #include <cstdlib>
 #include <string>

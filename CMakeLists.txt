@@ -1,12 +1,27 @@
-cmake_minimum_required(VERSION 3.31.6)
-project(cppmathlib)
-add_library(cppmath STATIC src/matrix.cpp src/series.cpp)
-set_target_properties(cppmath PROPERTIES PUBLIC_HEADER
-  include/matrix.hpp
+cmake_minimum_required(VERSION 3.14)
+project(cppmathlib VERSION 1.0.0)
+
+include(GNUInstallDirs)
+
+add_library(luan SHARED
+  src/matrix.cpp
+  src/series.cpp
 )
-target_include_directories(cppmath PUBLIC ${CMAKE_SOURCE_DIR}/include/)
-install(
-  TARGETS cppmath 
-  LIBRARY DESTINATION lib
-  PUBLIC_HEADER DESTINATION include
+
+# Set target include directories
+target_include_directories(luan PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include>)
+
+set_target_properties(luan PROPERTIES
+  PUBLIC_HEADER 
+  "include/luan/list.hpp;
+  include/luan/matrix.hpp;
+  include/luan/series.hpp;
+  include/luan/tree.hpp"
+)
+
+install(TARGETS luan
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/luan
 )
