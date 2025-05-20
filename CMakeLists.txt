@@ -3,7 +3,7 @@ project(cppmathlib VERSION 1.0.0)
 
 include(GNUInstallDirs)
 
-add_library(luan SHARED
+add_library(luan STATIC
   src/matrix.cpp
   src/series.cpp
 )
@@ -12,11 +12,7 @@ add_library(luan SHARED
 target_include_directories(luan PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include>)
 
 set_target_properties(luan PROPERTIES
-  PUBLIC_HEADER 
-  "include/luan/list.hpp;
-  include/luan/matrix.hpp;
-  include/luan/series.hpp;
-  include/luan/tree.hpp"
+  PUBLIC_HEADER "include/list.hpp;include/matrix.hpp;include/series.hpp;include/tree.hpp"
 )
 
 install(TARGETS luan
